@@ -1,0 +1,23 @@
+{
+  "name": "leo",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "bin": {
+    "leo": "./dist/index.js"
+  },
+  "files": [
+    "./dist/**/*"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^12.7.4",
+    "commander": "^3.0.1",
+    "parcel-plugin-shebang": "^1.2.8",
+    "typescript": "^3.6.2"
+  },
+  "scripts": {
+    "start": "parcel ./src/index.ts --target node",
+    "build": "parcel build ./src/index.ts --target node",
+    "watch": "parcel watch ./src/index.ts --target node"
+  }
+}
