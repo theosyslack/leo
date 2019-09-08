@@ -41,10 +41,16 @@ const addJiraCommand = (program: any) => {
   program
     .command("jira [tickets...]")
     .description(
-      "Creates a url URL for the ticket number and copies it to your clipboard"
+      "Creates a URL for the ticket number and copies it to your clipboard"
     )
     .option("-b --base [url]", "Set a url base for the ticket.")
     .action(async (tickets: string[], command: any) => {
+      if (!tickets.length) {
+        console.log("Enter a ticket number.");
+        command.help();
+        return;
+      }
+
       console.log(tickets);
       const base = command.base || "http://jira.com/";
       const url = `${base}/browse/${tickets[0]}`;
