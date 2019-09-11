@@ -1,4 +1,5 @@
 import clipboardy from "clipboardy";
+
 const action = async (tickets: string[], command: any) => {
   if (!tickets.length) {
     console.log("Enter a ticket number.");
