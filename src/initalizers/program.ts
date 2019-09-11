@@ -1,4 +1,4 @@
-import clipboardy from "clipboardy";
+import addJiraCommand from "../commands/jira/addJiraCommand";
 
 type CommandDefinition = {
   name: string;
@@ -23,7 +23,6 @@ const commandAdder = (program: any) => ({
 
   return program.action(action);
 };
-
 
 const initializeProgram = () => {
   const program = require("commander");
