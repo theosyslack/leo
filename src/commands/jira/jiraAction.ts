@@ -38,10 +38,17 @@ const getHistory = async (): Promise<TicketCollection> => {
 const askForTicket = async () => {
   const history = await getHistory();
   const tickets: Ticket[] = Object.values(history);
-  const result = await inquirer.prompt([
+
+  if (tickets.length === 0) {
+    console.clear();
+    log("Let's save your first ticket!", "success");
+    return askToCreateNewTicket();
+  }
+
+  const { ticketNumber } = await inquirer.prompt([
     {
       type: "autocomplete",
-      name: "number",
+      name: "ticketNumber",
       message: "Select a Ticket.",
       source: async (__: any, input = "") => {
         const extract = ({ number, description }: Ticket) =>
@@ -62,12 +69,15 @@ const askForTicket = async () => {
       }
     }
   ]);
-  const [index] = result.number.split(" ");
-  return history[index];
+  const [index] = ticketNumber.split(" ");
+  const ticket = history[index];
+  return ticket;
+  log(`Copied ${ticket.url} to clipboard.`, "success");
+  await clipboardy.write(ticket.url);
+  return ticket;
 };
 
 const askToCreateNewTicket = async (): Promise<Ticket> => {
-  console.clear();
   let result: Ticket;
 
   const { url, description } = await inquirer.prompt([
@@ -121,9 +131,11 @@ const askToCreateNewTicket = async (): Promise<Ticket> => {
     });
 
     file.writeObjectToFile(JIRA_HISTORY_FILE_PATH, updatedHistory);
+    log(`Thanks, I'll remember ${result.number} ticket for later.`, "success");
 
     return result;
   } else {
+    console.clear();
     return askToCreateNewTicket();
   }
 };
@@ -138,8 +150,5 @@ const action = async () => {
   if (typeof ticket === "undefined") {
     ticket = await askToCreateNewTicket();
   }
-
-  log(`Copied ${ticket.url} to clipboard.`, "success");
-  await clipboardy.write(ticket.url);
 };
 export default action;
