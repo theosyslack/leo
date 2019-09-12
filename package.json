@@ -22,6 +22,9 @@
     "typescript": "^3.6.2"
   },
   "scripts": {
+    "prepublish": "npm run build",
+    "pretest": "npm run build",
+    "postinstall": "npm run build",
     "start": "parcel ./src/index.ts --target node",
     "build": "parcel build ./src/index.ts --target node",
     "watch": "parcel watch ./src/index.ts --target node"
