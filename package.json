@@ -6,7 +6,7 @@
     "leo": "./dist/index.js"
   },
   "files": [
-    "./dist/index.js"
+    "./dist"
   ],
   "license": "MIT",
   "dependencies": {
