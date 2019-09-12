@@ -1,6 +1,6 @@
 {
   "name": "@theosyslack/leo",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "./dist/index.js",
   "bin": {
     "leo": "./dist/index.js"
