@@ -71,7 +71,6 @@ const askForTicket = async () => {
   ]);
   const [index] = ticketNumber.split(" ");
   const ticket = history[index];
-  return ticket;
   log(`Copied ${ticket.url} to clipboard.`, "success");
   await clipboardy.write(ticket.url);
   return ticket;
