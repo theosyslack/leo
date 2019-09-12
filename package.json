@@ -14,7 +14,11 @@
     "chalk": "^2.4.2",
     "clipboardy": "^2.1.0",
     "commander": "^3.0.1",
+    "inquirer": "^7.0.0",
+    "inquirer-autocomplete-prompt": "^1.0.1",
+    "inquirer-command-prompt": "^0.0.20",
     "parcel-plugin-shebang": "^1.2.8",
+    "ramda": "^0.26.1",
     "typescript": "^3.6.2"
   },
   "scripts": {
