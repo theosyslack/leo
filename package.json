@@ -17,6 +17,7 @@
     "inquirer": "^7.0.0",
     "inquirer-autocomplete-prompt": "^1.0.1",
     "inquirer-command-prompt": "^0.0.20",
+    "parcel": "^1.12.3",
     "parcel-plugin-shebang": "^1.2.8",
     "ramda": "^0.26.1",
     "typescript": "^3.6.2"
