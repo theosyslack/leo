@@ -1,10 +1,7 @@
-Usage: leo [options][command]
+# Install
 
-Options:
--V, --version output the version number
--d, --debug Output options for easier debugging.
--o, --open-database Open the location of the database.
--h, --help output usage information
+- `yarn global @theosyslack/leo`
 
-Commands:
-jira [ticket] Creates a URL for the ticket number and copies it to your clipboard
+# Try Running
+
+- `leo jira`
