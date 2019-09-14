@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "esnext",
-    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
