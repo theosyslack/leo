@@ -18,3 +18,7 @@ For now. 🦁
 - `yarn global @theosyslack/leo`
 
 ---
+
+**Note:** Leo is most useful when you've installed the autocompletion helper. This will suggest Tickets to you if you only know the beginning -- entering `leo jira ABC-1` and hitting tab could suggest `ABC-123`, `ABC-456`, and `ABC-678`.
+
+- `leo --install-autocomplete`
