@@ -1,43 +1,71 @@
 import log from "../../common/log";
-import { getHistory } from "./getHistory";
 import { askToCreateNewTicket } from "./askToCreateNewTicket";
-import * as fuzzy from "fuzzy";
+import fuzzy, { FilterResult } from "fuzzy";
 import * as inquirer from "inquirer";
-import * as clipboardy from "clipboardy";
+import { copyTicketToClipboard, getTicketInfo } from ".";
+import { getHistory } from "./getHistory";
 
-export const askForTicket = async () => {
+const filterTicketsByString = (
+  input: string,
+  tickets: Ticket[]
+): FilterResult<Ticket>[] => {
+  return fuzzy.filter(input, tickets, {
+    extract: convertTicketToString
+  });
+};
+
+export const getTicketsAsArray = async (): Promise<Ticket[]> => {
   const history = await getHistory();
-  const tickets: Ticket[] = Object.values(history);
-  if (tickets.length === 0) {
-    console.clear();
-    log("Let's save your first ticket!", "success");
-    return askToCreateNewTicket();
+  return Object.values(history);
+};
+
+const askForFirstTicket = async (): Promise<Ticket> => {
+  log("Let's save your first ticket!", "success");
+  return askToCreateNewTicket();
+};
+
+export const convertTicketToString = ticket => JSON.stringify(ticket);
+
+const getAutocompleteResults = async (__: string, input = "") => {
+  const tickets = await getTicketsAsArray();
+  const results = filterTicketsByString(input, tickets);
+
+  const resultStrings = results.map((result: FilterResult<Ticket>) => {
+    const { number, description } = result.original;
+    return `${number} (${description})`;
+  });
+
+  if (input === "") {
+    return [`Create New Ticket`, ...resultStrings];
+  } else {
+    return [...resultStrings, `Create New Ticket`];
   }
+};
+
+const askForTicketSelection = async (): Promise<Ticket> => {
   const { ticketNumber } = await inquirer.prompt([
     {
       type: "autocomplete",
       name: "ticketNumber",
       message: "Select a Ticket.",
-      source: async (__: any, input = "") => {
-        const extract = ({ number, description }: Ticket) =>
-          `${number} ${description}`;
-        const results = fuzzy.filter(input, tickets, {
-          extract
-        });
-        const resultStrings = results.map((result: any) => {
-          return result.string;
-        });
-        if (input === "") {
-          return [`Create New Ticket`, ...resultStrings];
-        } else {
-          return [...resultStrings, `Create New Ticket`];
-        }
-      }
+      source: getAutocompleteResults
     }
   ]);
   const [index] = ticketNumber.split(" ");
-  const ticket = history[index];
-  log(`Copied ${ticket.url} to clipboard.`, "success");
-  await clipboardy.write(ticket.url);
+  const ticket = await getTicketInfo(index);
+  copyTicketToClipboard({ ticket });
   return ticket;
+};
+
+const hasTicketHistory = async () => {
+  const tickets = await getTicketsAsArray();
+  return tickets.length === 0;
+};
+
+export const askForTicket = async () => {
+  if (await hasTicketHistory()) {
+    return askForFirstTicket();
+  } else {
+    return askForTicketSelection();
+  }
 };
