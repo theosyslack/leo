@@ -24,6 +24,7 @@
     "parcel": "^1.12.3",
     "parcel-plugin-shebang": "^1.2.8",
     "ramda": "^0.26.1",
+    "tabtab": "^3.0.2",
     "typescript": "^3.6.2"
   },
   "scripts": {

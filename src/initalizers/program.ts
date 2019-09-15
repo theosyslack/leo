@@ -1,9 +1,9 @@
-import * as jira from "../commands/jira";
-import { DATABASE_PATH } from "../common/consts";
-import program from "commander";
-import { createFolderForFile } from "../common/files";
 import open from "open";
 import log from "../common/log";
+import program from "commander";
+import { DATABASE_PATH } from "../common/consts";
+import * as autocomplete from "../commands/autocomplete";
+import * as jira from "../commands/jira";
 
 const initializeProgram = async () => {
   const { version } = require("../../package.json");
@@ -13,6 +13,7 @@ const initializeProgram = async () => {
   program.option("-d, --debug", "Output options for easier debugging.");
   program.option("-o, --open-database", "Open the location of the database.");
 
+  autocomplete.add(program);
   jira.add(program);
 
   program.parse(process.argv);
