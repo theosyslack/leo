@@ -1,4 +1,5 @@
 import * as inquirer from "inquirer";
+import * as file from "../../common/files";
 import log from "../../common/log";
 import { URL } from "url";
 import { JIRA_HISTORY_FILE_PATH } from "../../common/consts";
