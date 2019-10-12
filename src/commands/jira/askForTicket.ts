@@ -53,7 +53,10 @@ const askForTicketSelection = async (): Promise<Ticket> => {
   ]);
   const [index] = ticketNumber.split(" ");
   const ticket = await getTicketInfo(index);
-  copyTicketToClipboard({ ticket });
+
+  if (ticket != null) {
+    copyTicketToClipboard({ ticket });
+  }
   return ticket;
 };
 
