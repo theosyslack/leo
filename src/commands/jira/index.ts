@@ -6,6 +6,13 @@ import { askToCreateNewTicket } from "./askToCreateNewTicket";
 import log from "../../common/log";
 import clipboardy from "clipboardy";
 
+export const getTicketByAlias = async (val: string): Promise<Ticket|null> => {
+  const ticket: Ticket = Object.values(await getHistory())
+    .find((indvTicket) => indvTicket.aliases.includes(val));
+
+  return ticket != null ? ticket : null;
+};
+
 const getTicketByQuery = async (val: string): Promise<Ticket|null> => {
   const ticket: [string, Ticket] = Object.entries(await getHistory())
     .find(([ticketNumber, ticket]) => ticketNumber === val || ticket.aliases.includes(val));

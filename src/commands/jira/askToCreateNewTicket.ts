@@ -4,6 +4,7 @@ import log from "../../common/log";
 import { URL } from "url";
 import { JIRA_HISTORY_FILE_PATH } from "../../common/consts";
 import { getHistory } from "./getHistory";
+import { getTicketByAlias } from './index';
 
 export const askToCreateNewTicket = async (): Promise<Ticket> => {
   let result: Ticket;
@@ -32,7 +33,28 @@ export const askToCreateNewTicket = async (): Promise<Ticket> => {
     {
       type: "text",
       name: "aliases",
-      message: "Add comma-separated aliases for easy searching."
+      message: "Add comma-separated aliases for easy searching.",
+      validate: async (input: string) => {
+        if (input == null || input.trim() === "") {
+          return true;
+        }
+
+        const aliases = input.split(",").map(str => str.trim());
+
+        const mappedAliases: Array<string> = await Promise.all(aliases.map(async alias => {
+          const ticket = await getTicketByAlias(alias);
+
+          return (ticket != null) ? alias : null;
+        }));
+        const alreadyUsed = mappedAliases.filter(val => val != null);
+
+        if (alreadyUsed.length > 0) {
+          const usedAliases = alreadyUsed.join(", ");
+          return `Aliases '${usedAliases}' are already in use.`;
+        }
+
+        return true;
+      }
     }
   ]);
 
@@ -43,7 +65,7 @@ export const askToCreateNewTicket = async (): Promise<Ticket> => {
     url,
     number,
     description,
-    aliases
+    aliases: aliases
   };
   log(result);
   const { isConfirmed } = await inquirer.prompt({
