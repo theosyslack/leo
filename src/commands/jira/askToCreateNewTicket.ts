@@ -7,7 +7,7 @@ import { getHistory } from "./getHistory";
 
 export const askToCreateNewTicket = async (): Promise<Ticket> => {
   let result: Ticket;
-  const { url, description } = await inquirer.prompt([
+  const { url, description, aliases: aliasesString } = await inquirer.prompt([
     {
       type: "text",
       name: "url",
@@ -28,16 +28,22 @@ export const askToCreateNewTicket = async (): Promise<Ticket> => {
       type: "text",
       name: "description",
       message: "Add a description:"
+    },
+    {
+      type: "text",
+      name: "aliases",
+      message: "Add comma-separated aliases for easy searching."
     }
   ]);
+
+  const aliases = aliasesString.split(",").map(str => str.trim());
   const [base, number] = url.split("browse/");
   result = {
     base: base + "browse/",
     url,
     number,
     description,
-    //TODO add aliases
-    aliases: []
+    aliases
   };
   log(result);
   const { isConfirmed } = await inquirer.prompt({
