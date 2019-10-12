@@ -6,17 +6,11 @@ import { askToCreateNewTicket } from "./askToCreateNewTicket";
 import log from "../../common/log";
 import clipboardy from "clipboardy";
 
-export const isValidTicketNumber = async (
-  ticketNumber: TicketNumber
-): Promise<boolean> => {
-  if (ticketNumber === "") return false;
+const getTicketByQuery = async (val: string): Promise<Ticket|null> => {
+  const ticket: [string, Ticket] = Object.entries(await getHistory())
+    .find(([ticketNumber, ticket]) => ticketNumber === val || ticket.aliases.includes(val));
 
-  const validKeys = await getTicketNumbers();
-  return validKeys.includes(ticketNumber);
-};
-
-export const getTicketNumbers = async () => {
-  return Object.keys(await getHistory());
+  return ticket != null ? ticket[1] : null;
 };
 
 export const getTicketInfo = async (
@@ -38,11 +32,19 @@ export const copyTicketToClipboard = async ({
   log(`Copied ${ticket.url} to clipboard.`, "success");
 };
 
-const action = async (ticketNumber: string, command: any) => {
+const action = async (query: string, command: any) => {
   inquirer.registerPrompt("command", command);
   inquirer.registerPrompt("autocomplete", autocomplete);
-  if (await isValidTicketNumber(ticketNumber)) {
-    return await copyTicketToClipboard({ ticketNumber });
+
+  if (query != "" && query != null) {
+    const ticket = await getTicketByQuery(query);
+
+    if (ticket != null) {
+      return await copyTicketToClipboard({
+        ticket,
+        ticketNumber: ticket.number
+      });
+    }
   }
 
   let ticket = await askForTicket();

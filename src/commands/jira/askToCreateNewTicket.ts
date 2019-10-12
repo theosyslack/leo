@@ -35,7 +35,9 @@ export const askToCreateNewTicket = async (): Promise<Ticket> => {
     base: base + "browse/",
     url,
     number,
-    description
+    description,
+    //TODO add aliases
+    aliases: []
   };
   log(result);
   const { isConfirmed } = await inquirer.prompt({
