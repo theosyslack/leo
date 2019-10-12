@@ -50,7 +50,7 @@ const action = async (query: string, command: any) => {
   let ticket = await askForTicket();
 
   if (typeof ticket === "undefined") {
-    ticket = await askToCreateNewTicket();
+    await askToCreateNewTicket();
   }
 };
 
