@@ -8,7 +8,7 @@ interface Ticket {
   base: TicketBase;
   url: TicketUrl; // url = base + number
   description?: TicketDescription;
-  aliases: Array<String>;
+  aliases: Array<string>;
 }
 
 interface TicketCollection {
